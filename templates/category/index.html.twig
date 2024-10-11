@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <a class="btn btn-primary m-3" href="{{ path('category.new') }}">Créer une catégorie</a>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la catégorie</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in datas %}
+                <tr>
+                    <td>
+                        <a href="{{ path('category.show', {id: data.id}) }}">{{ data.name }}</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{{ path('category.show', {id: data.id}) }}">Show</a>
+                        <a class="btn btn-warning btn-sm" href="{{ path('category.edit', {id: data.id}) }}">Éditer</a>
+                        <a class="btn btn-danger btn-sm" href="{{ path('category.remove', {id: data.id}) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
