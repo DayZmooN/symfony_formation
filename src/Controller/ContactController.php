@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContactController extends AbstractController
 {
 
-    #[Route('/contact', name: 'app_contact')]
+    #[Route('/contact', name: 'contact.index')]
     public function index(Request $request,ContactService $contactService,MailerInterface $mailer ): Response
     {
         $form = $this->createForm(ContactType::class);

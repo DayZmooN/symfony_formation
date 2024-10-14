@@ -23,7 +23,7 @@ class CategoryController extends AbstractController
     }
 
 
-    #[Route('/category/new',name: 'category.new')]
+    #[Route('/category/create',name: 'category.create')]
     public function new(EntityManagerInterface $em,Request $request): Response
     {
         $form=$this->createForm(CategoryType::class);
