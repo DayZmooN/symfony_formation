@@ -1,6 +1,4 @@
-{# templates/emails/contact.html.twig #}
-{#<style>
-    /* Styles de base pour la compatibilité avec les emails */
+<style>
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -28,7 +26,7 @@
         font-size: 0.9em;
         color: #6c757d;
     }
-</style>#}
+</style>
 <div class="container">
     <div class="header">
         <h1>Welcome {{ contact.email }}!</h1>
@@ -36,11 +34,5 @@
     <p>
         Vous vous êtes inscrit avec le message : <strong>{{ contact.message }}</strong> à l'adresse email suivante :
     </p>
-    <p>
-        {{ contact.email | nl2br  }}
-    </p>
-    <div class="footer">
-        <p>Merci de votre inscription !</p>
-    </div>
 </div>
 
