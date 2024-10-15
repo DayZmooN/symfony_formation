@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/admin.html.twig' %}
 
 {% block title %}Toute les recette{% endblock %}
 
@@ -7,7 +7,7 @@
 
     <div class="container my-4">
         <h1 class="mb-4">Mes Recettes</h1>
-        <a href="{{ path('recette.create') }}" class="btn btn-primary mb-3">Créer une Recette</a>
+        <a href="{{ path('admin.recipe.create') }}" class="btn btn-primary mb-3">Créer une Recette</a>
 
         <table class="table table-striped">
             <thead>
@@ -20,11 +20,12 @@
             {% for recipe in recipes %}
                 <tr>
                     <td>
-                        <a href="{{ path('recette.show', {id: recipe.id, slug: recipe.slug}) }}" class="text-decoration-none">{{ recipe.title }}</a>
+                        <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}" class="text-decoration-none">{{ recipe.title }}</a>
                     </td>
                     <td>
                         <div class="d-flex gap-1">
-                            <a href="{{ path('recette.edit', {id: recipe.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
+                            <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
+
                           {#  <form action="{{ path('recette.delete',{id:recipe.id}) }}" method="post">
                                 <input type="hidden" value="DELETE" name="_method">
                             <a type="submit" href="{{ path('recette.delete',{id:recipe.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
@@ -32,7 +33,7 @@
                             </form>
                           #}
                             <form method="post">
-                            <a type="submit"  href="{{ path('recette.delete',{id:recipe.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
+                            <a type="submit"  href="{{ path('admin.recipe.delete',{id:recipe.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
                             </form>
                         </div>
 

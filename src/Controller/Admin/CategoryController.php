@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-
+#[Route(path: '/category', name: 'admin.category.')]
 class CategoryController extends AbstractController
 {
 
-    #[Route('/category', name: 'category.index')]
+    #[Route('/', name: 'index')]
     public function index(EntityManagerInterface $em): Response
     {
         /**
@@ -32,14 +32,14 @@ class CategoryController extends AbstractController
         $datas = $em->getRepository(Category::class)->findAll();
 
         // Retourne à la vue du template avec render
-        return $this->render('category/index.html.twig', [
+        return $this->render('admin/category/index.html.twig', [
             // Envoie des données à la vue
-            'datas' => $datas,
+            'datas' => $datas
         ]);
     }
 
 
-    #[Route('/category/create', name: 'category.create')]
+    #[Route('/create', name: 'create')]
     public function new(EntityManagerInterface $em, Request $request): Response
     {
         /**
@@ -69,62 +69,38 @@ class CategoryController extends AbstractController
             // Création d'un message de succès en session
             $this->addFlash('success', 'category created');
             // Redirection vers la route category.index
-            return $this->redirectToRoute('category.index');
+            return $this->redirectToRoute('admin.category.index');
         }
 
         // Retourne la vue pour afficher le formulaire
-        return $this->render('category/new.html.twig', [
+        return $this->render('admin/category/new.html.twig', [
             // Envoie la variable form pour afficher le formulaire
             'form' => $form,
         ]);
     }
 
-    #[Route('/category/{id}', name: 'category.show')]
-    public function show(Category $category): Response
-    {
-        /**
-         * Affiche les détails d'une catégorie spécifique.
-         *
-         * Cette méthode récupère la catégorie par son ID,
-         * puis renvoie la vue correspondante pour afficher
-         * les informations de la catégorie.
-         *
-         * @param Category $category L'objet catégorie récupéré par l'ID.
-         * @return Response La réponse HTTP contenant la vue des détails de la catégorie.
-         */
+//    #[Route('/{id}', name: 'category.show')]
+//    public function show(Category $category): Response
+//    {
+//        /**
+//         * Affiche les détails d'une catégorie spécifique.
+//         *
+//         * Cette méthode récupère la catégorie par son ID,
+//         * puis renvoie la vue correspondante pour afficher
+//         * les informations de la catégorie.
+//         *
+//         * @param Category $category L'objet catégorie récupéré par l'ID.
+//         * @return Response La réponse HTTP contenant la vue des détails de la catégorie.
+//         */
+//
+//        // Retourne la vue pour afficher les détails de la catégorie
+//        return $this->render('category/show.html.twig', [
+//            'category' => $category, // Envoie la catégorie au template
+//        ]);
+//    }
 
-        // Retourne la vue pour afficher les détails de la catégorie
-        return $this->render('category/show.html.twig', [
-            'category' => $category, // Envoie la catégorie au template
-        ]);
-    }
 
-    #[Route('/category/{id}/remove', name: 'category.remove')]
-    public function remove(EntityManagerInterface $em, Category $category): Response
-    {
-        /**
-         * Supprime une catégorie de la base de données.
-         *
-         * Cette méthode supprime la catégorie spécifiée,
-         * enregistre les changements en base de données,
-         * et redirige vers la liste des catégories avec un message de succès.
-         *
-         * @param EntityManagerInterface $em L'EntityManager pour interagir avec la base de données.
-         * @param Category $category L'objet catégorie à supprimer.
-         * @return Response La réponse HTTP redirigeant vers la liste des catégories.
-         */
-
-        // Supprime la catégorie spécifiée de la base de données
-        $em->remove($category);
-        // Applique les changements en base de données
-        $em->flush();
-        // Création d'un message de succès en session pour indiquer que la catégorie a été supprimée
-        $this->addFlash('success', 'category removed');
-        // Redirection vers la route category.index
-        return $this->redirectToRoute('category.index');
-    }
-
-    #[Route('/category/{id}/edit', name: 'category.edit')]
+    #[Route('/{id}', name: 'edit')]
     public function edit(EntityManagerInterface $em, Category $category, Request $request): Response
     {
         /**
@@ -153,7 +129,7 @@ class CategoryController extends AbstractController
                 // Création d'un message de succès en session pour indiquer que la catégorie a été mise à jour
                 $this->addFlash('success', 'category updated');
                 // Redirection vers la route category.index
-                return $this->redirectToRoute('category.index');
+                return $this->redirectToRoute('admin.category.index');
             } catch (\Exception $e) {
                 // En cas d'erreur, ajoute un message d'erreur en session
                 $this->addFlash('error', $e->getMessage());
@@ -164,8 +140,31 @@ class CategoryController extends AbstractController
         return $this->render('category/edit.html.twig', [
             'form' => $form, // Envoie le formulaire au template
             'category' => $category, // Envoie la catégorie au template
-
         ]);
+    }
+    #[Route('/{id}/delete', name: 'remove')]
+    public function remove(EntityManagerInterface $em, Category $category): Response
+    {
+        /**
+         * Supprime une catégorie de la base de données.
+         *
+         * Cette méthode supprime la catégorie spécifiée,
+         * enregistre les changements en base de données,
+         * et redirige vers la liste des catégories avec un message de succès.
+         *
+         * @param EntityManagerInterface $em L'EntityManager pour interagir avec la base de données.
+         * @param Category $category L'objet catégorie à supprimer.
+         * @return Response La réponse HTTP redirigeant vers la liste des catégories.
+         */
+
+        // Supprime la catégorie spécifiée de la base de données
+        $em->remove($category);
+        // Applique les changements en base de données
+        $em->flush();
+        // Création d'un message de succès en session pour indiquer que la catégorie a été supprimée
+        $this->addFlash('success', 'category removed');
+        // Redirection vers la route category.index
+        return $this->redirectToRoute('admin.category.index');
     }
 
 }

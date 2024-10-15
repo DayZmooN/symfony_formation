@@ -4,13 +4,19 @@ namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class CategoryType extends AbstractType
 {
+    public function __construct(private FormListenerFactory $listenerFactory){
+    }
+
     /**
      * Construit le formulaire Category avec les champs nécessaires.
      *
@@ -20,17 +26,31 @@ class CategoryType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+
         $builder
             // Ajoute un champ pour le nom de la catégorie
             ->add('name', TextType::class, [
                 'label' => 'Nom', // Étiquette du champ
                 'empty_data' => "", // Valeur par défaut si le champ est vide
             ])
+            ->add('slug',TextType::class, [
+                'label' => 'Slug',
+                'empty_data' => "",
+                'required' => false,
+            ])
+
             // Ajoute un bouton de soumission
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer', // Étiquette du bouton
-            ]);
+            ])
+        ->addEventListener(FormEvents::PRE_SUBMIT,$this->listenerFactory->autoSlug('name'))
+        ->addEventListener(FormEvents::POST_SUBMIT,$this->listenerFactory->timestamps());
+
+
     }
+
+
 
     /**
      * Configure les options pour le formulaire.
@@ -45,4 +65,6 @@ class CategoryType extends AbstractType
             'data_class' => Category::class, // Associe le formulaire à la classe Category
         ]);
     }
+
+
 }
